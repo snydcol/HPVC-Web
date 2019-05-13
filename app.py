@@ -12,13 +12,17 @@ db = SQLAlchemy(app)
 
 
 # Import any SQLAlchemy model classes you wish.
-#from models import FIXME
+from models import User, Computer
+
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+@app.route('/login/')
+def login():
+    return 
 
 if __name__ == '__main__':
     app.run()
