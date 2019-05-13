@@ -2,4 +2,3 @@ package-lock.json
 node_modules/
 venv/
 __pycache__/
-git_commands.txt
