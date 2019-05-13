@@ -55,3 +55,20 @@ to take a file off of your git status (you accidently git
 #######################################################
 #######################################################
 
+database management
+
+    -----------------------------    
+    python manage.py db init  (DO THIS ONCE)
+    -----------------------------
+
+    do the following to make changes to the 
+        tables or database
+    -----------------------------
+    python manage.py db migrate
+    python manage.py db upgrade
+    -----------------------------    
+
+#######################################################
+#######################################################
+#######################################################
+
