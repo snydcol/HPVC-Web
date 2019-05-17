@@ -17,7 +17,7 @@ class App extends React.Component {
 
   render() {
     let component = (this.state.view === 'login')
-      ? <Login onLogin={() => this.onLogin()} />
+      ? <Login onLogin={() => this.doLogin()} />
       : <UserInfo />;
 
     return (
