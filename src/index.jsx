@@ -32,25 +32,34 @@ class App extends React.Component {
 class Login extends React.Component {
   render() {
     return (
-      <form id="login-form">
-        <input
-          placeholder="Your name"
-          id="username"
-          name="username" />
-        <br />
-        <input
-          placeholder="Probably password"
-          type="password"
-          id="password"
-          name="password" />
-        <br />
-        <button
-          id="login-btn"
-          onClick={(evt) => {
-            evt.preventDefault();
-            alert('Hello');
-          }}>Try to enter</button>
-    </form>
+      <div id="login-form">
+        <form id="login-utils">
+          <input
+            placeholder="Your name"
+            id="username"
+            name="username" />
+          <br />
+          <input
+            placeholder="Probably password"
+            type="password"
+            id="password"
+            name="password" />
+          <br />
+          <button
+            id="login-btn"
+            onClick={(evt) => {
+              evt.preventDefault();
+              alert('Hello');
+            }}>Try to enter</button>
+        </form>
+      
+      <button id="register"
+        onClick={(evt) => {
+          evt.preventDefault();
+          alert('You\'re new?');
+        }}>New?</button>
+
+      </div>
     );
   }
 }
@@ -59,7 +68,7 @@ class HPC extends React.Component {
   render() {
     return (
       <div className="hpc">
-        <p>Name: {this.props.name}</p>
+        <p>{this.props.name}</p>
         <p>Owner: {this.props.owner}</p>
       </div>
     );
@@ -89,11 +98,8 @@ class HPCs extends React.Component {
         });
 
     return (
-      <div>
-        Number of items: {compList.length} 
-        <div className="HPC-list">
-          {compList} 
-        </div>
+      <div className="HPC-list">
+        {compList} 
       </div>
     );
   }

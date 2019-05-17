@@ -8,14 +8,23 @@
   justify-content: center;
 }
 
-#login-form {
+#login-utils {
   display: flex;
   justify-content: center;
   flex-direction: column;
+}
+
+#login-form {
   margin: 20px 0px 20px 0px;
   padding: 10px;
   border-top: 2px dashed black;
   border-bottom: 2px dashed black;
+}
+
+#register {
+  margin-top: 10px;
+  background-color: transparent;
+  border: none;
 }
 
 .hpc {
@@ -23,6 +32,7 @@
   flex-direction: column;
   padding: 10px;
   border: 2px solid grey;
+  margin-bottom: 15px;
 }
 
 p {
