@@ -23,6 +23,14 @@ def validate(d, keys):
 def index():
     return render_template('index.html')
 
+@app.route('/api/logout/', methods=['POST'])    
+    try:
+        session['username'] = None
+        return 'ok'
+    except Exception as e:
+        return str(e),420 
+
+
 @app.route('/api/login/', methods=['POST'])
 def api_login():
     try:
@@ -41,8 +49,7 @@ def api_login():
     except Exception as e:
         return str(e), 400
 
-
-@app.route('/api/register', methods=['POST'])
+@app.route('/api/register/', methods=['POST'])
 def api_register():
     
     try:
@@ -56,7 +63,7 @@ def api_register():
             db.session.add(User(username = username, password = password))
             db.session.commit()
 
-            session['username'] = u
+            session['username'] = username
             return 'ok'
         else:
             return 'fail'
