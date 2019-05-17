@@ -40,6 +40,7 @@ class Login extends React.Component {
         <br />
         <input
           placeholder="Probably password"
+          type="password"
           id="password"
           name="password" />
         <br />
@@ -59,6 +60,7 @@ class HPC extends React.Component {
     return (
       <div className="hpc">
         <p>Name: {this.props.name}</p>
+        <p>Owner: {this.props.owner}</p>
       </div>
     );
   }
@@ -72,6 +74,10 @@ class HPCs extends React.Component {
               {key: 2, name: 'HPC_2', owner: 'None'},
               {key: 3, name: 'HPC_3', owner: 'None'},
               {key: 4, name: 'HPC_4', owner: 'None'},
+              {key: 5, name: 'HPC_5', owner: 'None'},
+              {key: 6, name: 'HPC_6', owner: 'None'},
+              {key: 7, name: 'HPC_7', owner: 'None'},
+              {key: 8, name: 'HPC_8', owner: 'None'},
              ],
     };
   }
