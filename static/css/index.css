@@ -15,8 +15,10 @@
 }
 
 #login-form {
+  width: 30vh;
   margin: 20px 0px 20px 0px;
-  padding: 10px;
+  padding: 10px; 
+  overflow: hidden;
   border-top: 2px dashed black;
   border-bottom: 2px dashed black;
 }
@@ -33,6 +35,14 @@
   padding: 10px;
   border: 2px solid grey;
   margin-bottom: 15px;
+}
+
+.app {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 75vh ;
+  overflow: hidden;
 }
 
 p {
