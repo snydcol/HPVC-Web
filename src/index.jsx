@@ -9,16 +9,16 @@ class App extends React.Component {
     };
   }
 
-  onLogin() {
+  doLogin() {
     this.setState({
-      view: 'avengers'
+      view: 'loggedIn'
     });
   }
 
   render() {
     let component = (this.state.view === 'login')
       ? <Login onLogin={() => this.onLogin()} />
-      : <Avengers />;
+      : <UserInfo />;
 
     return (
         <div className="app">
@@ -30,6 +30,25 @@ class App extends React.Component {
 }
 
 class Login extends React.Component {
+
+  loginRequest() {
+    var data = new FormData(document.querySelector('#login-utils'));
+    window.fetch('/api/login/', {
+          method: 'POST',
+          body: data,
+        })
+        .then(result => result.text())
+        .then(
+              (result) => {
+                if (result === 'ok') 
+                  this.props.doLogin();
+                else
+                  alert('Bad combination');
+              },
+              (error) => { alert('Something happened?????'); },
+            );
+  }
+
   render() {
     return (
       <div id="login-form">
@@ -49,6 +68,7 @@ class Login extends React.Component {
             id="login-btn"
             onClick={(evt) => {
               evt.preventDefault();
+              this.loginRequest();
               alert('Hello');
             }}>Try to enter</button>
         </form>
@@ -70,6 +90,16 @@ class HPC extends React.Component {
       <div className="hpc">
         <p>{this.props.name}</p>
         <p>Owner: {this.props.owner}</p>
+      </div>
+    );
+  }
+}
+
+class UserInfo extends React.Component {
+  render() {
+    return (
+      <div className="user-info">
+        <p>HELLOLLOLOO</p>
       </div>
     );
   }
