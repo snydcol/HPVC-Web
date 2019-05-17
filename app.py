@@ -24,6 +24,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/api/logout/', methods=['POST'])    
+def api_logout():    
     try:
         session['username'] = None
         return 'ok'
