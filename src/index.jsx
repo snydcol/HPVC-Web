@@ -15,9 +15,15 @@ class App extends React.Component {
     });
   }
 
+  doLogout() {
+    this.setState({
+      view: 'login'
+    });
+  }
+
   render() {
     let component = (this.state.view === 'login')
-      ? <Login onLogin={() => this.doLogin()} />
+      ? <Login doLogin={() => this.doLogin()} />
       : <UserInfo />;
 
     return (
@@ -51,7 +57,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div id="login-form">
+      <div className="login-form">
         <form id="login-utils">
           <input
             placeholder="Your name"
@@ -69,7 +75,6 @@ class Login extends React.Component {
             onClick={(evt) => {
               evt.preventDefault();
               this.loginRequest();
-              alert('Hello');
             }}>Try to enter</button>
         </form>
       
@@ -96,11 +101,34 @@ class HPC extends React.Component {
 }
 
 class UserInfo extends React.Component {
+
+  logoutRequest() {
+    window.fetch('/api/logout/', {
+          method: 'POST',
+        })
+        .then(result => result.text())
+        .then(
+              (result) => {
+                if (result === 'ok') 
+                  this.props.doLogout();
+                else
+                  alert('You\'re logged out..but something went wrong.');
+              },
+              (error) => { alert('Something happened?????'); },
+            );
+  }
+
   render() {
     return (
-      <div className="user-info">
+      <div className="login-form">
         <p>HELLOLLOLOO</p>
-      </div>
+        
+        <button id="logout"
+          onClick={(evt) => {
+            evt.preventDefault();
+            this.props.doLogout();
+          }}>Logout</button>
+        </div>
     );
   }
 }
