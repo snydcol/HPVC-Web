@@ -5,26 +5,28 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: 'login'
+      view: 'login',
     };
   }
 
-  doLogin() {
+  doLogin(u) {
     this.setState({
-      view: 'loggedIn'
+      view: 'loggedIn',
+      username: u,
     });
+  
   }
 
   doLogout() {
     this.setState({
-      view: 'login'
+      view: 'login',
     });
   }
 
   render() {
     let component = (this.state.view === 'login')
-      ? <Login doLogin={() => this.doLogin()} />
-      : <UserInfo />;
+      ? <Login doLogin={() => this.doLogin('asdf')} />
+      : <UserInfo doLogout={() => this.doLogout()} />;
 
     return (
         <div className="app">
@@ -39,6 +41,8 @@ class Login extends React.Component {
 
   loginRequest() {
     var data = new FormData(document.querySelector('#login-utils'));
+    var user = data.get('username');
+    console.log(data.get('username'));
     window.fetch('/api/login/', {
           method: 'POST',
           body: data,
@@ -47,7 +51,7 @@ class Login extends React.Component {
         .then(
               (result) => {
                 if (result === 'ok') 
-                  this.props.doLogin();
+                  this.props.doLogin(user);
                 else
                   alert('Bad combination');
               },
@@ -118,15 +122,21 @@ class UserInfo extends React.Component {
             );
   }
 
+  componentDidMount() {
+    
+  }
+
   render() {
+    console.log(this.state);
+    console.log(this.state.username);
     return (
-      <div className="login-form">
-        <p>HELLOLLOLOO</p>
+      <div id="welcome-message" className="login-form">
+        <p>Hello {this.state.username}</p>
         
         <button id="logout"
           onClick={(evt) => {
             evt.preventDefault();
-            this.props.doLogout();
+            this.logoutRequest();
           }}>Logout</button>
         </div>
     );
