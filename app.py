@@ -1,4 +1,4 @@
-from flask import abort, Flask, json, redirect,\
+rom flask import abort, Flask, json, redirect,\
     render_template, request, Response, url_for, session, jsonify
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
@@ -121,7 +121,7 @@ def api_computers():
     
     return jsonify(computers)
 
-@app.route('/api/timeToLive/', methods=['POST'])  
+@app.route('/api/timeToLive/', methods=['GET'])  
 def api_TimeToLive():
     computers = list(lambda c: c.serialize(),
             Computer.query.order_by(Computer.id).all())
