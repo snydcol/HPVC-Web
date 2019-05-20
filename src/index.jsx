@@ -6,6 +6,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       view: 'login',
+      loggedIn: false,
     };
   }
 
@@ -13,24 +14,28 @@ class App extends React.Component {
     this.setState({
       view: 'loggedIn',
       username: u,
+      loggedIn: true,
     });
   }
 
   doLogout() {
     this.setState({
       view: 'login',
+      loggedIn: false,
     });
   }
 
   switchToRegister() {
     this.setState({
       view: 'register',
+      loggedIn: false,
     });
   }
 
   switchToLogin() {
     this.setState({
       view: 'login',
+      loggedIn: false,
     });
   }
 
@@ -45,7 +50,7 @@ class App extends React.Component {
     return (
         <div className="app">
           {component}
-          <HPCs />
+          <HPCs loggedIn={this.state.loggedIn}/>
         </div>
         );
   }
@@ -197,12 +202,47 @@ class UserInfo extends React.Component {
 
 class HPC extends React.Component {
   render() {
-    return (
-      <div className="hpc">
-        <p>{this.props.name}</p>
-        <p>Owner: {this.props.owner}</p>
-      </div>
-    );
+    console.log("HPC says user is "+this.props.loggedIn+" logged in");
+    if (this.props.loggedIn === true)
+      return (
+        <div className="hpc">
+          <p>{this.props.name}</p>
+
+          <table className="table table-borderless">
+            <tbody>
+              <tr>
+                <td>Owner: {this.props.owner}</td>
+                <td>Release date: {this.props.release_date}</td>
+              </tr>
+              <tr>
+                <td>
+                  <button id="register_hpc"
+                    onClick={(evt) => {
+                      evt.preventDefault();
+                      alert("You want to reserve"+this.props.name);
+                    }}>Reserve</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      );
+
+    else
+      return (
+        <div className="hpc">
+          <p>{this.props.name}</p>
+
+          <table className="table table-borderless">
+            <tbody>
+              <tr>
+                <td>Owner: {this.props.owner}</td>
+                <td>Release date: {this.props.release_date}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      );
   }
 }
 
@@ -210,22 +250,23 @@ class HPCs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      hpcs: [{key: 1, name: 'HPC_1', owner: 'None'},
-              {key: 2, name: 'HPC_2', owner: 'None'},
-              {key: 3, name: 'HPC_3', owner: 'None'},
-              {key: 4, name: 'HPC_4', owner: 'None'},
-              {key: 5, name: 'HPC_5', owner: 'None'},
-              {key: 6, name: 'HPC_6', owner: 'None'},
-              {key: 7, name: 'HPC_7', owner: 'None'},
-              {key: 8, name: 'HPC_8', owner: 'None'},
-             ],
+      hpcs: [{key: 1, name: 'HPC_1', owner: 'None', release_date: 'YYYY'},
+             {key: 2, name: 'HPC_2', owner: 'None', release_date: 'YYYY'},
+             {key: 3, name: 'HPC_3', owner: 'None', release_date: 'YYYY'},
+             {key: 4, name: 'HPC_4', owner: 'None', release_date: 'YYYY'},
+             {key: 5, name: 'HPC_5', owner: 'None', release_date: 'YYYY'},
+             {key: 6, name: 'HPC_6', owner: 'None', release_date: 'YYYY'},
+             {key: 7, name: 'HPC_7', owner: 'None', release_date: 'YYYY'},
+             {key: 8, name: 'HPC_8', owner: 'None', release_date: 'YYYY'},
+            ],
     };
   }
 
   render() {
+    console.log("user is "+this.props.loggedIn + " logged in.");
     let compList = [];
     this.state.hpcs.forEach(comp => {
-        compList.push(<HPC key={comp.key} name={comp.name} owner={comp.owner} />);
+        compList.push(<HPC key={comp.key} name={comp.name} owner={comp.owner} release_date={comp.release_date} loggedIn={this.props.loggedIn} />);
         });
 
     return (
