@@ -116,26 +116,25 @@ def api_release():
 
 @app.route('/api/computers/', methods=['POST'])
 def api_computers():
-    computers = list(lambda c: c.serialize(),
-            Computer.query.all())
+    computers = list(map(lambda c: c.serialize(),
+            Computer.query.all()))
     
     return jsonify(computers)
 
 @app.route('/api/timeToLive/', methods=['GET'])  
 def api_TimeToLive():
-    computers = list(lambda c: c.serialize(),
-            Computer.query.order_by(Computer.id).all())
+    computers = list(map(lambda c: c.serialize(),
+            Computer.query.order_by(Computer.compID).all()))
     # Calculate time once because we dont need ms accuracy
     curTime = datetime.datetime.now()
     
-    for c in computer:
+    for c in computers:
         try:
             if curTime >= c.reservTil:
                 c.reserveTil = None
         except:
             pass
     db.session.commit()
-    
     return jsonify(computers)
 
 
