@@ -14,7 +14,6 @@ class App extends React.Component {
       view: 'loggedIn',
       username: u,
     });
-  
   }
 
   doLogout() {
@@ -23,11 +22,26 @@ class App extends React.Component {
     });
   }
 
+  switchToRegister() {
+    this.setState({
+      view: 'register',
+    });
+  }
+
+  switchToLogin() {
+    this.setState({
+      view: 'login',
+    });
+  }
+
   render() {
     let component = (this.state.view === 'login')
-      ? <Login doLogin={() => this.doLogin('asdf')} />
-      : <UserInfo doLogout={() => this.doLogout()} />;
+      ? <Login switchToRegister={() => this.switchToRegister()} doLogin={(u) => this.doLogin(u)} />
+      : <UserInfo uname={this.state.username} doLogout={() => this.doLogout()} />;
 
+    if (this.state.view === 'register')
+      component = <Register switchToLogin={() => this.switchToLogin()} doLogin={(u) => this.doLogin(u)} />;
+      
     return (
         <div className="app">
           {component}
@@ -62,7 +76,8 @@ class Login extends React.Component {
   render() {
     return (
       <div className="login-form">
-        <form id="login-utils">
+        <p><strong> Logging in ! </strong></p>
+        <form className="utils" id="login-utils">
           <input
             placeholder="Your name"
             id="username"
@@ -82,10 +97,10 @@ class Login extends React.Component {
             }}>Try to enter</button>
         </form>
       
-      <button id="register"
+      <button className="clear-btn" id="register"
         onClick={(evt) => {
           evt.preventDefault();
-          alert('You\'re new?');
+          this.props.switchToRegister();
         }}>New?</button>
 
       </div>
@@ -93,12 +108,55 @@ class Login extends React.Component {
   }
 }
 
-class HPC extends React.Component {
+class Register extends React.Component {
+
+  registerRequest() {
+    var data = new FormData(document.querySelector('#register-utils'));
+    var user = data.get('username');
+    window.fetch('/api/register/', {
+          method: 'POST',
+          body: data,
+        })
+        .then(result => result.text())
+        .then(
+              (result) => {
+                if (result === 'ok') 
+                  this.props.doLogin(user);
+                else
+                  alert('Bad register?');
+              },
+              (error) => { alert('Something happened?????'); },
+            );
+  }
+
   render() {
     return (
-      <div className="hpc">
-        <p>{this.props.name}</p>
-        <p>Owner: {this.props.owner}</p>
+      <div className="login-form">
+        <form className="utils" id="register-utils">
+          <p><strong> Signing up ! </strong></p>
+          <input
+            placeholder="Name you want"
+            id="username"
+            name="username" />
+          <br />
+          <input
+            placeholder="Password you want"
+            type="password"
+            id="password"
+            name="password" />
+          <br />
+          <button
+            id="register-btn"
+            onClick={(evt) => {
+              evt.preventDefault();
+              this.registerRequest();
+            }}>Sign UP</button>
+        </form>
+      <button className="clear-btn" id="register"
+        onClick={(evt) => {
+          evt.preventDefault();
+          this.props.switchToLogin();
+        }}>Back to login</button>
       </div>
     );
   }
@@ -122,16 +180,10 @@ class UserInfo extends React.Component {
             );
   }
 
-  componentDidMount() {
-    
-  }
-
   render() {
-    console.log(this.state);
-    console.log(this.state.username);
     return (
       <div id="welcome-message" className="login-form">
-        <p>Hello {this.state.username}</p>
+        <p>Hello {this.props.uname} </p>
         
         <button id="logout"
           onClick={(evt) => {
@@ -139,6 +191,17 @@ class UserInfo extends React.Component {
             this.logoutRequest();
           }}>Logout</button>
         </div>
+    );
+  }
+}
+
+class HPC extends React.Component {
+  render() {
+    return (
+      <div className="hpc">
+        <p>{this.props.name}</p>
+        <p>Owner: {this.props.owner}</p>
+      </div>
     );
   }
 }

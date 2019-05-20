@@ -8,7 +8,7 @@
   justify-content: center;
 }
 
-#login-utils {
+.utils {
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -23,7 +23,7 @@
   border-bottom: 2px dashed black;
 }
 
-#register {
+.clear-btn { 
   margin-top: 10px;
   background-color: transparent;
   border: none;
