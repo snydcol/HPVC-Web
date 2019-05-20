@@ -204,8 +204,10 @@ class HPC extends React.Component {
 
   sendReserveRequest(comp, time) {
     alert("You want to reserve "+comp+" for "+time+" hours");
-    var data = {"computer": comp, "reserve_time": time};
-    
+    var data = new FormData();
+    data.set("computer", comp);
+    data.set("reserve_time", time);
+    console.log("request:"+data);
     window.fetch('/api/reserve/', {
           method: 'POST',
           body: data,
@@ -291,6 +293,7 @@ class HPC extends React.Component {
 }
 
 class HPCs extends React.Component {
+  // Next step is query database for HPCS
   constructor(props) {
     super(props);
     this.state = {

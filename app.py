@@ -3,6 +3,7 @@ from flask import abort, Flask, json, redirect,\
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 import os
+import datetime
 
 app = Flask(__name__)
 app.config.from_object(os.environ['APP_SETTINGS'])
@@ -72,6 +73,30 @@ def api_register():
     except Exception as e:
         return str(e), 400
 
+@app.route('/api/reserve/', methods=['POST'])
+def api_reserve():
+    
+    validate(request.form, ['computer', 'reserve_time'])
+
+    computer_id, reserve_time = request.form['computer'], int(request.form['reserve_time'])
+    computer_num = computer_id[computer_id.index('_')+1:]
+
+    t = datetime.datetime.now()
+    release_time = t + datetime.timedelta(hours=reserve_time)
+
+    c = Computer.query.filter(Computer.compID == computer_num).first()
+    c.reserved = True
+    c.username = session['username']
+    c.reservTil = release_time
+    db.session.commit()
+    print("found:",c)
+    #print("Got time of:",t)
+    #print("releasing:",release_time)
+
+    return 'ok'
+    
+#   except Exception as e:
+#     return str(e), 400
 
 if __name__ == '__main__':
     app.run()
