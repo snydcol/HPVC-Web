@@ -1,4 +1,4 @@
-rom flask import abort, Flask, json, redirect,\
+from flask import abort, Flask, json, redirect,\
     render_template, request, Response, url_for, session, jsonify
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
