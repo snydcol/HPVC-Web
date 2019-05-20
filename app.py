@@ -111,15 +111,33 @@ def api_release():
     c.username = None
     c.reservTil = None
     db.session.commit()
-    print("found:",c)
 
     return 'ok'
+
 @app.route('/api/computers/', methods=['POST'])
 def api_computers():
     computers = list(lambda c: c.serialize(),
-            Computer.query.order_by(Computer.id).all())
+            Computer.query.all())
     
     return jsonify(computers)
+
+@app.route('/api/timeToLive/', methods=['POST'])  
+def api_TimeToLive():
+    computers = list(lambda c: c.serialize(),
+            Computer.query.order_by(Computer.id).all())
+    # Calculate time once because we dont need ms accuracy
+    curTime = datetime.datetime.now()
+    
+    for c in computer:
+        try:
+            if curTime >= c.reservTil:
+                c.reserveTil = None
+        except:
+            pass
+    db.session.commit()
+    
+    return jsonify(computers)
+
 
 
 if __name__ == '__main__':
