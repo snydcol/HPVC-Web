@@ -78,7 +78,9 @@ def api_reserve():
     
     validate(request.form, ['computer', 'reserve_time'])
 
-    computer_id, reserve_time = request.form['computer'], int(request.form['reserve_time'])
+    computer_id = request.form['computer']
+    reserve_time = int(request.form['reserve_time'])
+    
     computer_num = computer_id[computer_id.index('_')+1:]
 
     t = datetime.datetime.now()
@@ -94,9 +96,31 @@ def api_reserve():
     #print("releasing:",release_time)
 
     return 'ok'
+
+@app.route('/api/release/', methods=['POST'])
+def api_release():
     
-#   except Exception as e:
-#     return str(e), 400
+    validate(request.form, ['computer'])
+
+    computer_id = request.form['computer'] 
+    computer_num = computer_id[computer_id.index('_')+1:]
+
+
+    c = Computer.query.filter(Computer.compID == computer_num).first()
+    c.reserved = False
+    c.username = None
+    c.reservTil = None
+    db.session.commit()
+    print("found:",c)
+
+    return 'ok'
+@app.route('/api/computers/', methods=['POST'])
+def api_computers():
+    computers = list(lambda c: c.serialize(),
+            Computer.query.order_by(Computer.id).all())
+    
+    return jsonify(computers)
+
 
 if __name__ == '__main__':
     app.run()
