@@ -201,6 +201,27 @@ class UserInfo extends React.Component {
 }
 
 class HPC extends React.Component {
+
+  sendReserveRequest(comp, time) {
+    alert("You want to reserve "+comp+" for "+time+" hours");
+    var data = {"computer": comp, "reserve_time": time};
+    
+    window.fetch('/api/reserve/', {
+          method: 'POST',
+          body: data,
+        })
+        .then(result => result.text())
+        .then(
+              (result) => {
+                if (result === 'ok') 
+                  alert('Got you registered!');
+                else
+                  alert('Sent request but failed.');
+              },
+              (error) => { alert('Something happened?????'); },
+            );
+  }
+  
   render() {
     console.log("HPC says user is "+this.props.loggedIn+" logged in");
     if (this.props.loggedIn === true)
@@ -216,11 +237,34 @@ class HPC extends React.Component {
               </tr>
               <tr>
                 <td>
-                  <button id="register_hpc"
-                    onClick={(evt) => {
-                      evt.preventDefault();
-                      alert("You want to reserve"+this.props.name);
-                    }}>Reserve</button>
+                  <div className="dropdown">
+                    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Reserve 
+                    </button>
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a className="dropdown-item" onClick=
+                              {(evt) => {
+                                evt.preventDefault(); 
+                                this.sendReserveRequest(this.props.name, 2);
+                              }}>2 hours</a>
+
+                      <a className="dropdown-item" onClick=
+                              {(evt) => {
+                                evt.preventDefault(); 
+                                this.sendReserveRequest(this.props.name, 4);
+                              }}>4 hours</a>
+                      <a className="dropdown-item" onClick=
+                              {(evt) => {
+                                evt.preventDefault(); 
+                                this.sendReserveRequest(this.props.name, 12);
+                              }}>12 hours</a>
+                      <a className="dropdown-item" onClick=
+                              {(evt) => {
+                                evt.preventDefault(); 
+                                this.sendReserveRequest(this.props.name, 24);
+                              }}>24 hours</a>
+                    </div>
+                  </div>
                 </td>
               </tr>
             </tbody>
