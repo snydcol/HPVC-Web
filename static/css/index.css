@@ -35,6 +35,16 @@
   padding: 10px;
   border: 2px solid grey;
   margin-bottom: 15px;
+  background-color: lightgreen;
+}
+
+.takenhpc {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 2px solid grey;
+  margin-bottom: 15px;
+  background-color: darksalmon;
 }
 
 .app {

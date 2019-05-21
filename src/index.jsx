@@ -50,7 +50,7 @@ class App extends React.Component {
     return (
         <div className="app">
           {component}
-          <HPCs loggedIn={this.state.loggedIn}/>
+          <HPCs logUser={this.state.username} loggedIn={this.state.loggedIn}/>
         </div>
         );
   }
@@ -201,9 +201,18 @@ class UserInfo extends React.Component {
 }
 
 class HPC extends React.Component {
-// make constructor built with props that so can change it when registration
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: this.props.name,
+      owner: this.props.owner,
+      release_date: this.props.release_date,
+    };
+
+  }
   sendReserveRequest(comp, time) {
-    alert("You want to reserve "+comp+" for "+time+" hours");
+    //alert("You want to reserve "+comp+" for "+time+" hours");
     var data = new FormData();
     data.set("computer", comp);
     data.set("reserve_time", time);
@@ -218,9 +227,9 @@ class HPC extends React.Component {
                 result = JSON.parse(result);
                 console.log("Receiving:");console.log(result);
                 if (result.rstatus === 'ok') {
-                  alert('Got you registered! '+result.username);
-                  this.props.owner = result.username;
-                  this.props.reservTil = result.reservTil;
+                  alert('Got you registered!');
+                  this.setState({owner: result.username,
+                            release_date: result.reservTil});
                 }
                 else
                   alert('Sent request but failed.');
@@ -230,19 +239,31 @@ class HPC extends React.Component {
   }
   
   render() {
-    console.log("HPC says user is "+this.props.loggedIn+" logged in");
+    //console.log("HPC says user is "+this.props.loggedIn+" logged in");
+    var hpcstatus = "hpc";
+    if (this.props.owner != null) 
+      hpcstatus = "takenhpc";
+
     if (this.props.loggedIn === true)
       return (
-        <div className="hpc">
-          <p>{this.props.name}</p>
+        <div className={hpcstatus}>
+          <p>{this.state.name}</p>
 
           <table className="table table-borderless">
             <tbody>
+                {this.props.logUser == this.state.owner ? (
+                  <tr>
+                    <td>Owner: <strong>{this.state.owner}</strong></td>
+                    <td>Release date: <strong>{this.state.release_date}</strong></td>
+                  </tr>
+                ) : (
+                <tr>
+                  <td>Owner: {this.props.owner}</td>
+                  <td>Release date: {this.props.release_date}</td>
+                </tr>
+                  )}
               <tr>
-                <td>Owner: {this.props.owner}</td>
-                <td>Release date: {this.props.release_date}</td>
-              </tr>
-              <tr>
+                {this.state.owner == null ? (
                 <td>
                   <div className="dropdown">
                     <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -252,27 +273,42 @@ class HPC extends React.Component {
                       <a className="dropdown-item" onClick=
                               {(evt) => {
                                 evt.preventDefault(); 
-                                this.sendReserveRequest(this.props.name, 2);
+                                this.sendReserveRequest(this.state.name, 2);
                               }}>2 hours</a>
 
                       <a className="dropdown-item" onClick=
                               {(evt) => {
                                 evt.preventDefault(); 
-                                this.sendReserveRequest(this.props.name, 4);
+                                this.sendReserveRequest(this.state.name, 4);
                               }}>4 hours</a>
                       <a className="dropdown-item" onClick=
                               {(evt) => {
                                 evt.preventDefault(); 
-                                this.sendReserveRequest(this.props.name, 12);
+                                this.sendReserveRequest(this.state.name, 12);
                               }}>12 hours</a>
                       <a className="dropdown-item" onClick=
                               {(evt) => {
                                 evt.preventDefault(); 
-                                this.sendReserveRequest(this.props.name, 24);
+                                this.sendReserveRequest(this.state.name, 24);
                               }}>24 hours</a>
                     </div>
                   </div>
-                </td>
+                </td> ) : (
+                  <td/>
+                  )}
+
+                  {this.props.logUser == this.state.owner ? (
+                    <td>
+                      <button id="release"
+                        onClick={(evt) => {
+                          evt.preventDefault();
+                          alert('going to release');
+                        }}>Release</button>
+                    </td>
+                ) : (
+                    <td>
+                    </td>
+                  )}
               </tr>
             </tbody>
           </table>
@@ -281,7 +317,7 @@ class HPC extends React.Component {
 
     else
       return (
-        <div className="hpc">
+        <div className={hpcstatus}>
           <p>{this.props.name}</p>
 
           <table className="table table-borderless">
@@ -313,7 +349,6 @@ class HPCs extends React.Component {
             );
   }
 
-  // Next step is query database for HPCS
   constructor(props) {
     super(props);
 
@@ -343,7 +378,7 @@ class HPCs extends React.Component {
     let compList = [];
     try {
       this.state.computers.forEach(comp => {
-          compList.push(<HPC name={comp.computername} key={comp.compID} owner={comp.username} release_date={comp.reservTil} loggedIn={this.props.loggedIn} />);
+          compList.push(<HPC logUser={this.props.logUser} name={comp.computername} key={comp.compID} owner={comp.username} release_date={comp.reservTil} loggedIn={this.props.loggedIn} />);
           });
     }
     catch (e) {}
