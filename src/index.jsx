@@ -288,14 +288,19 @@ class HPC extends React.Component {
                     <td>Owner: <strong>{this.state.owner}</strong></td>
                     <td>Release date: <strong>{this.state.release_date}</strong></td>
                   </tr>
-                ) : (
-                <tr>
-                  <td>Owner: {this.state.owner}</td>
-                  <td>Release date: {this.state.release_date}</td>
-                </tr>
+                ) : ( this.state.owner != null ?
+                    <tr>
+                      <td>Owner: {this.state.owner}</td>
+                      <td>Release date: {this.state.release_date}</td>
+                    </tr>
+                    :
+                    <tr>
+                      <td><p>Available!</p></td>
+                    </tr>
+                    
                   )}
               <tr>
-                {this.state.owner == null ? (
+                {this.state.owner == null && 
                 <td>
                   <div className="dropdown">
                     <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -326,11 +331,10 @@ class HPC extends React.Component {
                               }}>24 hours</a>
                     </div>
                   </div>
-                </td> ) : (
-                  <td/>
-                  )}
+                </td>
+                  }
 
-                  {this.props.logUser == this.state.owner ? (
+                  {this.props.logUser == this.state.owner && 
                     <td>
                       <button className="btn btn-danger" id="release"
                         onClick={(evt) => {
@@ -338,10 +342,7 @@ class HPC extends React.Component {
                           this.sendReleaseRequest(this.state.name);
                         }}>Release</button>
                     </td>
-                ) : (
-                    <td>
-                    </td>
-                  )}
+                  }
               </tr>
             </tbody>
           </table>
@@ -355,10 +356,18 @@ class HPC extends React.Component {
 
           <table className="table table-borderless">
             <tbody>
+              {this.state.owner == null ? (
               <tr>
-                <td>Owner: {this.props.owner}</td>
-                <td>Release date: {this.props.release_date}</td>
+                <td><p>Available!</p></td>
               </tr>
+              )
+              :
+              (
+              <tr>
+                <td>Owner: {this.state.owner}</td>
+                <td>Release date: {this.state.release_date}</td>
+              </tr>
+               )}
             </tbody>
           </table>
         </div>
