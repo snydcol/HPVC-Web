@@ -60,7 +60,7 @@ def api_register():
         username, password = request.form['username'], request.form['password']
         user = User.query.filter(User.username == username).first()
         
-        if username ='' or password = '':
+        if username =='' or password == '':
             return 'fail'
 
         if user is None:
@@ -87,7 +87,7 @@ def api_reserve():
     computer_num = computer_id[computer_id.index('_')+1:]
 
     t = datetime.datetime.now()
-    release_time = t + datetime.timedelta(seconds=reserve_time)
+    release_time = t + datetime.timedelta(hours=reserve_time)
 
     c = Computer.query.filter(Computer.compID == computer_num).first()
     c.reserved = True
