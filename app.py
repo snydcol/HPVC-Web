@@ -59,7 +59,10 @@ def api_register():
 
         username, password = request.form['username'], request.form['password']
         user = User.query.filter(User.username == username).first()
-    
+        
+        if username ='' or password = '':
+            return 'fail'
+
         if user is None:
 
             db.session.add(User(username = username, password = password))
@@ -69,7 +72,7 @@ def api_register():
             return 'ok'
         else:
             return 'fail'
-
+            
     except Exception as e:
         return str(e), 400
 
@@ -106,7 +109,7 @@ def api_release():
     computer_num = computer_id[computer_id.index('_')+1:]
 
 
-    c = Computer.query.filter(Computer.compID == computer_num).first()
+    c = Computer.query.filter(Computer.compID == int(computer_num)).first()
     c.reserved = False
     c.username = None
     c.reservTil = None
