@@ -214,6 +214,16 @@ class HPC extends React.Component {
     };
 
   }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      name: nextProps.name,
+      owner: nextProps.owner,
+      release_date: nextProps.release_date,
+    });
+    
+  }
+
   sendReserveRequest(comp, time) {
     //alert("You want to reserve "+comp+" for "+time+" hours");
     var data = new FormData();
@@ -240,11 +250,34 @@ class HPC extends React.Component {
               (error) => { alert('Something happened?????'); },
             );
   }
+
+  sendReleaseRequest(comp) {
+    var f = new FormData();
+    f.set("computer", comp);
+    window.fetch('/api/release/', {
+          method: 'POST',
+          body: f,
+        }).then(result => result.text())
+        .then((result) => {
+              if (result === 'ok') {
+                this.setState({
+                  owner: null,
+                  release_date: null,
+                 });
+                console.log(this.state);
+              }
+              else
+                alert('It was not released');
+            }, (error) => {alert('Something happened????'); },
+            );
+  }
   
   render() {
     //console.log("HPC says user is "+this.props.loggedIn+" logged in");
+    console.log("this hpc:");
+    console.log(this.state);
     var hpcstatus = "hpc";
-    if (this.props.owner != null) 
+    if (this.state.owner != null) 
       hpcstatus = "takenhpc";
 
     if (this.props.loggedIn === true)
@@ -276,6 +309,12 @@ class HPC extends React.Component {
                       <a className="dropdown-item" onClick=
                               {(evt) => {
                                 evt.preventDefault(); 
+                                this.sendReserveRequest(this.state.name, 20);
+                              }}>1 segundos</a>
+
+                      <a className="dropdown-item" onClick=
+                              {(evt) => {
+                                evt.preventDefault(); 
                                 this.sendReserveRequest(this.state.name, 2);
                               }}>2 hours</a>
 
@@ -302,9 +341,10 @@ class HPC extends React.Component {
 
                   {this.props.logUser == this.state.owner ? (
                     <td>
-                      <button id="release"
+                      <button className="btn btn-danger" id="release"
                         onClick={(evt) => {
                           evt.preventDefault();
+                          this.sendReleaseRequest(this.state.name);
                           alert('going to release');
                         }}>Release</button>
                     </td>
@@ -339,6 +379,7 @@ class HPC extends React.Component {
 class HPCs extends React.Component {
 
   getComputers() {
+    console.log("fetching computers...");
     window.fetch('/api/timeToLive/', {
           method: 'GET',
         })
@@ -365,26 +406,29 @@ class HPCs extends React.Component {
              {key: 7, name: 'HPC_7', owner: 'None', release_date: 'YYYY'},
              {key: 8, name: 'HPC_8', owner: 'None', release_date: 'YYYY'},
             ],
-      computers: {},
+      computers: [],
     };
+    this.getComputers = this.getComputers.bind(this);
     this.getComputers();
   }
 
   componentDidMount() {
-
+    setInterval(this.getComputers, 10000);
   }
 
   render() {
     console.log("YOU SHOULD SEE IT MAN:");
-    console.log(typeof(this.state.computers));
+    console.log(this.state.computers);
     
     let compList = [];
     try {
       this.state.computers.forEach(comp => {
+          console.log("Here is what i see:");
+          console.log(comp);
           compList.push(<HPC logUser={this.props.logUser} name={comp.computername} key={comp.compID} owner={comp.username} release_date={comp.reservTil} loggedIn={this.props.loggedIn} />);
           });
     }
-    catch (e) {}
+    catch (e) {console.log(e);}
 
     return (
       <div className="HPC-list">
