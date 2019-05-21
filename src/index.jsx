@@ -274,8 +274,6 @@ class HPC extends React.Component {
   
   render() {
     //console.log("HPC says user is "+this.props.loggedIn+" logged in");
-    console.log("this hpc:");
-    console.log(this.state);
     var hpcstatus = "hpc";
     if (this.state.owner != null) 
       hpcstatus = "takenhpc";
@@ -379,7 +377,6 @@ class HPC extends React.Component {
 class HPCs extends React.Component {
 
   getComputers() {
-    console.log("fetching computers...");
     window.fetch('/api/timeToLive/', {
           method: 'GET',
         })
@@ -389,7 +386,7 @@ class HPCs extends React.Component {
                 this.setState({
                   computers: JSON.parse(result)});
               },
-              (error) => { alert('Something happened?????'); },
+              (error) => { },
             );
   }
 
@@ -417,14 +414,10 @@ class HPCs extends React.Component {
   }
 
   render() {
-    console.log("YOU SHOULD SEE IT MAN:");
-    console.log(this.state.computers);
     
     let compList = [];
     try {
       this.state.computers.forEach(comp => {
-          console.log("Here is what i see:");
-          console.log(comp);
           compList.push(<HPC logUser={this.props.logUser} name={comp.computername} key={comp.compID} owner={comp.username} release_date={comp.reservTil} loggedIn={this.props.loggedIn} />);
           });
     }
