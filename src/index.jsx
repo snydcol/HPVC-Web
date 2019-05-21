@@ -264,7 +264,6 @@ class HPC extends React.Component {
                   owner: null,
                   release_date: null,
                  });
-                console.log(this.state);
               }
               else
                 alert('It was not released');
@@ -292,8 +291,8 @@ class HPC extends React.Component {
                   </tr>
                 ) : (
                 <tr>
-                  <td>Owner: {this.props.owner}</td>
-                  <td>Release date: {this.props.release_date}</td>
+                  <td>Owner: {this.state.owner}</td>
+                  <td>Release date: {this.state.release_date}</td>
                 </tr>
                   )}
               <tr>
