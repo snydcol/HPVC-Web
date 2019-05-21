@@ -303,11 +303,6 @@ class HPC extends React.Component {
                         Reserve 
                     </button>
                     <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a className="dropdown-item" onClick=
-                              {(evt) => {
-                                evt.preventDefault(); 
-                                this.sendReserveRequest(this.state.name, 20);
-                              }}>1 segundos</a>
 
                       <a className="dropdown-item" onClick=
                               {(evt) => {
