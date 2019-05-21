@@ -1,4 +1,4 @@
-rom flask import abort, Flask, json, redirect,\
+from flask import abort, Flask, json, redirect,\
     render_template, request, Response, url_for, session, jsonify
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
@@ -123,18 +123,19 @@ def api_computers():
 
 @app.route('/api/timeToLive/', methods=['GET'])  
 def api_TimeToLive():
-    computers = list(lambda c: c.serialize(),
-            Computer.query.order_by(Computer.id).all())
+    computers = list(map(lambda c: c.serialize(),
+            Computer.query.order_by(Computer.compID).all()))
     # Calculate time once because we dont need ms accuracy
     curTime = datetime.datetime.now()
     
-    for c in computer:
+    for c in computers:
         try:
             if curTime >= c.reservTil:
                 c.reserveTil = None
         except:
             pass
     db.session.commit()
+    print(computers)
     
     return jsonify(computers)
 

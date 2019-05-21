@@ -293,9 +293,25 @@ class HPC extends React.Component {
 }
 
 class HPCs extends React.Component {
+
+  getComputers() {
+    window.fetch('/api/timeToLive/', {
+          method: 'GET',
+        })
+        .then(result => result.text())
+        .then(
+              (result) => {
+                this.setState({
+                  computers: JSON.parse(result)});
+              },
+              (error) => { alert('Something happened?????'); },
+            );
+  }
+
   // Next step is query database for HPCS
   constructor(props) {
     super(props);
+
     this.state = {
       hpcs: [{key: 1, name: 'HPC_1', owner: 'None', release_date: 'YYYY'},
              {key: 2, name: 'HPC_2', owner: 'None', release_date: 'YYYY'},
@@ -306,15 +322,26 @@ class HPCs extends React.Component {
              {key: 7, name: 'HPC_7', owner: 'None', release_date: 'YYYY'},
              {key: 8, name: 'HPC_8', owner: 'None', release_date: 'YYYY'},
             ],
+      computers: {},
     };
+    this.getComputers();
+  }
+
+  componentDidMount() {
+
   }
 
   render() {
-    console.log("user is "+this.props.loggedIn + " logged in.");
+    console.log("YOU SHOULD SEE IT MAN:");
+    console.log(typeof(this.state.computers));
+    
     let compList = [];
-    this.state.hpcs.forEach(comp => {
-        compList.push(<HPC key={comp.key} name={comp.name} owner={comp.owner} release_date={comp.release_date} loggedIn={this.props.loggedIn} />);
-        });
+    try {
+      this.state.computers.forEach(comp => {
+          compList.push(<HPC key={comp.compID} owner={comp.username} release_date={comp.reservTil} loggedIn={this.props.loggedIn} />);
+          });
+    }
+    catch (e) {}
 
     return (
       <div className="HPC-list">
