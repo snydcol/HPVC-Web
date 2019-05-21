@@ -240,7 +240,6 @@ class HPC extends React.Component {
                 result = JSON.parse(result);
                 console.log("Receiving:");console.log(result);
                 if (result.rstatus === 'ok') {
-                  alert('Got you registered!');
                   this.setState({owner: result.username,
                             release_date: result.reservTil});
                 }
@@ -337,7 +336,6 @@ class HPC extends React.Component {
                         onClick={(evt) => {
                           evt.preventDefault();
                           this.sendReleaseRequest(this.state.name);
-                          alert('going to release');
                         }}>Release</button>
                     </td>
                 ) : (
