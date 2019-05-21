@@ -96,6 +96,7 @@ class Login extends React.Component {
           <br />
           <button
             id="login-btn"
+            className= "btn btn-secondary"
             onClick={(evt) => {
               evt.preventDefault();
               this.loginRequest();
@@ -152,6 +153,7 @@ class Register extends React.Component {
           <br />
           <button
             id="register-btn"
+            className= "btn btn-secondary"
             onClick={(evt) => {
               evt.preventDefault();
               this.registerRequest();
@@ -190,8 +192,9 @@ class UserInfo extends React.Component {
       <div id="welcome-message" className="login-form">
         <p>Hello {this.props.uname} </p>
         
-        <button id="logout"
-          onClick={(evt) => {
+        <button id="logout" 
+            className= "btn btn-secondary"
+            onClick={(evt) => {
             evt.preventDefault();
             this.logoutRequest();
           }}>Logout</button>

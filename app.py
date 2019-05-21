@@ -117,8 +117,8 @@ def api_release():
 
 @app.route('/api/computers/', methods=['POST'])
 def api_computers():
-    computers = list(lambda c: c.serialize(),
-            Computer.query.all())
+    computers = list(map(lambda c: c.serialize(),
+            Computer.query.all()))
     
     return jsonify(computers)
 
