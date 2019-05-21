@@ -92,10 +92,11 @@ def api_reserve():
     c.reservTil = release_time
     db.session.commit()
     print("found:",c)
-    #print("Got time of:",t)
-    #print("releasing:",release_time)
 
-    return 'ok'
+    resp = c.serialize()
+    resp['rstatus'] = 'ok' 
+
+    return jsonify(resp) 
 
 @app.route('/api/release/', methods=['POST'])
 def api_release():

@@ -201,7 +201,7 @@ class UserInfo extends React.Component {
 }
 
 class HPC extends React.Component {
-
+// make constructor built with props that so can change it when registration
   sendReserveRequest(comp, time) {
     alert("You want to reserve "+comp+" for "+time+" hours");
     var data = new FormData();
@@ -215,8 +215,13 @@ class HPC extends React.Component {
         .then(result => result.text())
         .then(
               (result) => {
-                if (result === 'ok') 
-                  alert('Got you registered!');
+                result = JSON.parse(result);
+                console.log("Receiving:");console.log(result);
+                if (result.rstatus === 'ok') {
+                  alert('Got you registered! '+result.username);
+                  this.props.owner = result.username;
+                  this.props.reservTil = result.reservTil;
+                }
                 else
                   alert('Sent request but failed.');
               },
@@ -338,7 +343,7 @@ class HPCs extends React.Component {
     let compList = [];
     try {
       this.state.computers.forEach(comp => {
-          compList.push(<HPC key={comp.compID} owner={comp.username} release_date={comp.reservTil} loggedIn={this.props.loggedIn} />);
+          compList.push(<HPC name={comp.computername} key={comp.compID} owner={comp.username} release_date={comp.reservTil} loggedIn={this.props.loggedIn} />);
           });
     }
     catch (e) {}
