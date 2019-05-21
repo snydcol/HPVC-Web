@@ -1,3 +1,8 @@
+body {
+  background-image: url("https://venturebeat.com/wp-content/uploads/2016/06/datacenters.jpg?fit=1753%2C1029&strip=all");
+  color: white;
+}
+
 #content {
   display: flex;
   justify-content: center;
@@ -21,12 +26,16 @@
   overflow: hidden;
   border-top: 2px dashed black;
   border-bottom: 2px dashed black;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
 }
 
 .clear-btn { 
   margin-top: 10px;
-  background-color: transparent;
+  background-color: lime;
   border: none;
+  color: black; 
 }
 
 .hpc {
@@ -35,14 +44,20 @@
   padding: 10px;
   border: 2px solid grey;
   margin-bottom: 15px;
+  background-color: lightgreen;
+}
+
+.takenhpc {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 2px solid grey;
+  margin-bottom: 15px;
+  background-color: darksalmon;
 }
 
 .app {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   width: 75vh ;
-  overflow: hidden;
 }
 
 p {

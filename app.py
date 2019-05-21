@@ -87,7 +87,7 @@ def api_reserve():
     computer_num = computer_id[computer_id.index('_')+1:]
 
     t = datetime.datetime.now()
-    release_time = t + datetime.timedelta(hours=reserve_time)
+    release_time = t + datetime.timedelta(seconds=reserve_time)
 
     c = Computer.query.filter(Computer.compID == computer_num).first()
     c.reserved = True
@@ -95,10 +95,11 @@ def api_reserve():
     c.reservTil = release_time
     db.session.commit()
     print("found:",c)
-    #print("Got time of:",t)
-    #print("releasing:",release_time)
 
-    return 'ok'
+    resp = c.serialize()
+    resp['rstatus'] = 'ok' 
+
+    return jsonify(resp) 
 
 @app.route('/api/release/', methods=['POST'])
 def api_release():
@@ -132,12 +133,21 @@ def api_TimeToLive():
     curTime = datetime.datetime.now()
     
     for c in computers:
-        try:
-            if curTime >= c.reservTil:
-                c.reserveTil = None
-        except:
-            pass
-    db.session.commit()
+      try:
+        if curTime >= c['reservTil']:
+          c['reserveTil'] = None
+          u = Computer.query.filter(Computer.compID == c['compID']).first()
+          u.reservTil = None
+          u.reserved = False
+          u.username = None
+          db.session.commit()
+          print("needs to change",u)
+      except:
+        pass
+
+    computers = list(map(lambda c: c.serialize(),
+            Computer.query.order_by(Computer.compID).all()))
+    
     return jsonify(computers)
 
 
