@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+// APP //
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -244,7 +245,7 @@ class HPC extends React.Component {
                             release_date: result.reservTil});
                 }
                 else
-                  alert('Sent request but failed.');
+                  alert('Someone has this reserved already');
               },
               (error) => { alert('Something happened?????'); },
             );
@@ -293,7 +294,7 @@ class HPC extends React.Component {
                       <td>Owner: {this.state.owner}</td>
                       <td>Release date: {this.state.release_date}</td>
                     </tr>
-                    :
+                    : 
                     <tr>
                       <td><p>Available!</p></td>
                     </tr>
@@ -411,7 +412,7 @@ class HPCs extends React.Component {
   }
 
   componentDidMount() {
-    setInterval(this.getComputers, 10000);
+    setInterval(this.getComputers, 30000);
   }
 
   render() {

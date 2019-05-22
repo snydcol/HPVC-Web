@@ -45,6 +45,7 @@ body {
   border: 2px solid grey;
   margin-bottom: 15px;
   background-color: lightgreen;
+  color: darkblue;
 }
 
 .takenhpc {
@@ -54,6 +55,7 @@ body {
   border: 2px solid grey;
   margin-bottom: 15px;
   background-color: darksalmon;
+  color: darkblue;
 }
 
 .app {
