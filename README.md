@@ -9,3 +9,6 @@ HPCVC reservation system
 3.) Users should be able to reserve an HPC workstation for the next 2, 4, 12, or 24 hours when it is listed as “available.”
 4.) Users should be able to “release” their reservation at any time.
 5.)The display should refresh itself on 30 second intervals.  This should not be a full page refresh.
+
+To Run:
+frrun [PORT]
