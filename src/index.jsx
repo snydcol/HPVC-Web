@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+// APP //
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -240,12 +241,11 @@ class HPC extends React.Component {
                 result = JSON.parse(result);
                 console.log("Receiving:");console.log(result);
                 if (result.rstatus === 'ok') {
-                  alert('Got you registered!');
                   this.setState({owner: result.username,
                             release_date: result.reservTil});
                 }
                 else
-                  alert('Sent request but failed.');
+                  alert('Someone has this reserved already');
               },
               (error) => { alert('Something happened?????'); },
             );
@@ -289,14 +289,19 @@ class HPC extends React.Component {
                     <td>Owner: <strong>{this.state.owner}</strong></td>
                     <td>Release date: <strong>{this.state.release_date}</strong></td>
                   </tr>
-                ) : (
-                <tr>
-                  <td>Owner: {this.state.owner}</td>
-                  <td>Release date: {this.state.release_date}</td>
-                </tr>
+                ) : ( this.state.owner != null ?
+                    <tr>
+                      <td>Owner: {this.state.owner}</td>
+                      <td>Release date: {this.state.release_date}</td>
+                    </tr>
+                    : 
+                    <tr>
+                      <td><p>Available!</p></td>
+                    </tr>
+                    
                   )}
               <tr>
-                {this.state.owner == null ? (
+                {this.state.owner == null && 
                 <td>
                   <div className="dropdown">
                     <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -327,23 +332,18 @@ class HPC extends React.Component {
                               }}>24 hours</a>
                     </div>
                   </div>
-                </td> ) : (
-                  <td/>
-                  )}
+                </td>
+                  }
 
-                  {this.props.logUser == this.state.owner ? (
+                  {this.props.logUser == this.state.owner && 
                     <td>
                       <button className="btn btn-danger" id="release"
                         onClick={(evt) => {
                           evt.preventDefault();
                           this.sendReleaseRequest(this.state.name);
-                          alert('going to release');
                         }}>Release</button>
                     </td>
-                ) : (
-                    <td>
-                    </td>
-                  )}
+                  }
               </tr>
             </tbody>
           </table>
@@ -357,10 +357,18 @@ class HPC extends React.Component {
 
           <table className="table table-borderless">
             <tbody>
+              {this.state.owner == null ? (
               <tr>
-                <td>Owner: {this.props.owner}</td>
-                <td>Release date: {this.props.release_date}</td>
+                <td><p>Available!</p></td>
               </tr>
+              )
+              :
+              (
+              <tr>
+                <td>Owner: {this.state.owner}</td>
+                <td>Release date: {this.state.release_date}</td>
+              </tr>
+               )}
             </tbody>
           </table>
         </div>
@@ -404,7 +412,7 @@ class HPCs extends React.Component {
   }
 
   componentDidMount() {
-    setInterval(this.getComputers, 10000);
+    setInterval(this.getComputers, 30000);
   }
 
   render() {

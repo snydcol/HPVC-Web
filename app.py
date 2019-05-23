@@ -87,9 +87,16 @@ def api_reserve():
     computer_num = computer_id[computer_id.index('_')+1:]
 
     t = datetime.datetime.now()
+    # Use timedelta to get release time
     release_time = t + datetime.timedelta(hours=reserve_time)
 
     c = Computer.query.filter(Computer.compID == computer_num).first()
+
+    # Someone has this computer reserved already
+    if c.reserved:
+      return 'fail'
+
+    # Assign this HPC to the user who reserved it
     c.reserved = True
     c.username = session['username']
     c.reservTil = release_time
@@ -134,6 +141,7 @@ def api_TimeToLive():
     
     for c in computers:
       try:
+        # If the current time is greater than the release data, release HPC
         if curTime >= c['reservTil']:
           c['reserveTil'] = None
           u = Computer.query.filter(Computer.compID == c['compID']).first()
@@ -145,6 +153,7 @@ def api_TimeToLive():
       except:
         pass
 
+    # Send back updated list of computers
     computers = list(map(lambda c: c.serialize(),
             Computer.query.order_by(Computer.compID).all()))
     
