@@ -7,6 +7,7 @@ class Computer(db.Model):
     reserved = db.Column(db.Boolean())
     username = db.Column(db.String())
     reservTil = db.Column(db.DateTime())
+    computername = db.Column(db.String())
     
     def serialize(self):
         return {
@@ -14,6 +15,7 @@ class Computer(db.Model):
             'reserved': self.reserved,
             'username': self.username,
             'reservTil': self.reservTil,
+            'computername': self.computername,
         }
     
     def __repr__(self):
